@@ -2,5 +2,14 @@
 <resources>
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorAccent">#4787cd</color>
+
+    <color name="titleTextColor">#000000</color>
+    <color name="hintTextColor">#929292</color>
+    <color name="strokeColor">#4D929292</color>
+    <color name="blackAlpha30">#4D000000</color>
+    <color name="vk_blue">#4787cd</color>
+    <color name="vk_blue_press">#36689E</color>
+    <color name="et_bg">#f2f3f5</color>
+    <color name="whiteAlpha50">#80FFFFFF</color>
 </resources>

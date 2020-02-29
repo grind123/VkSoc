@@ -3,7 +3,6 @@ package com.grind.vksociety.adapters
 import android.content.res.Resources
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
@@ -17,12 +16,11 @@ val Int.toPx: Int
     get() = (this * Resources.getSystem().displayMetrics.density).toInt()
 
 
-class SocietyListAdapter(listener: OnItemClickListener): RecyclerView.Adapter<SocietyListAdapter.SocietyHolder>() {
+class SocietyListAdapter(private val listener: OnItemClickListener): RecyclerView.Adapter<SocietyListAdapter.SocietyHolder>() {
 
     private var items = listOf<Society>()
-    private val listener = listener
-    private var logoHeight = (App.screenWidth - (16*2).toPx - (8*6).toPx) / 3
-
+    private var logoHeight = (App.screenWidth - (16).toPx - (8*6).toPx) / 3
+    val selectedList = mutableListOf<Long>()
 
     class SocietyHolder(v: View): RecyclerView.ViewHolder(v){
         val logo: CircleImageView = v.findViewById(R.id.cimv_logo)
@@ -44,16 +42,25 @@ class SocietyListAdapter(listener: OnItemClickListener): RecyclerView.Adapter<So
 
     override fun onBindViewHolder(holder: SocietyHolder, position: Int) {
         val item = items[position]
+        if(selectedList.contains(item.id)){
+            holder.checkFrame.visibility = View.VISIBLE
+        } else {
+            holder.checkFrame.visibility = View.INVISIBLE
+        }
+
         holder.name.text = item.name
         Glide.with(holder.itemView).load(item.logoUrl).centerInside().into(holder.logo)
 
         holder.itemView.setOnClickListener{listener.onItemClick(item)}
         holder.itemView.setOnLongClickListener {
+            listener.onLongItemClick(item.id)
             if(holder.checkFrame.visibility == View.INVISIBLE){
                 holder.checkFrame.visibility = View.VISIBLE
+                selectedList.add(item.id)
                 return@setOnLongClickListener true
             } else {
                 holder.checkFrame.visibility = View.INVISIBLE
+                selectedList.remove(item.id)
                 return@setOnLongClickListener true
             }
         }
@@ -61,10 +68,14 @@ class SocietyListAdapter(listener: OnItemClickListener): RecyclerView.Adapter<So
 
     fun setItems(list: List<Society>){
         items = list
-        notifyDataSetChanged()
+    }
+
+    fun getItems(): List<Society>{
+        return items
     }
 
     interface OnItemClickListener{
         fun onItemClick(currSociety: Society)
+        fun onLongItemClick(societyId: Long)
     }
 }

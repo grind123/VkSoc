@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">VkSociety</string>
+    <string name="main_hint">Коснитесь и удерживайте, чтобы увидеть информацию о сообществе</string>
+    <string name="main_title">Отписаться от сообществ</string>
     <integer name="com_vk_sdk_AppId">7338448</integer>
 </resources>

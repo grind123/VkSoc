@@ -21,10 +21,11 @@ class MainActivity : AppCompatActivity() {
         getDisplayMetrics()
 
         if (savedInstanceState == null) {
-            VK.login(this, listOf(VKScope.GROUPS, VKScope.FRIENDS, VKScope.WALL))
+            VK.login(this, listOf(VKScope.GROUPS, VKScope.WALL))
         }
 
     }
+
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

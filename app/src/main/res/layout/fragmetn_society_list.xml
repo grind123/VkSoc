@@ -10,7 +10,7 @@
         android:gravity="center"
         android:textColor="@color/titleTextColor"
         android:textSize="18sp"
-        android:text="Отписаться от сообществ"
+        android:text="@string/main_title"
         android:textStyle="bold"/>
 
     <TextView
@@ -21,12 +21,27 @@
         android:layout_marginRight="32dp"
         android:layout_marginTop="8dp"
         android:textColor="@color/hintTextColor"
-        android:text="Коснитесь и удерживайте, чтобы увидеть информацию о сообществе" />
+        android:text="@string/main_hint" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:layout_marginTop="8dp"/>
+
+    <TextView
+        android:id="@+id/tv_unsubscribe_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/bg_button"
+        android:gravity="center"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:text="Отписаться"
+        android:visibility="gone"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"/>
 
 </LinearLayout>

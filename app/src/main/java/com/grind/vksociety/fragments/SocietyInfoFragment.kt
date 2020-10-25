@@ -47,7 +47,7 @@ class SocietyInfoFragment: Fragment(), ISocietyInfoView {
         super.onStart()
         presenter.getSocietyInfo(arguments?.getSerializable("item") as Society)
         dismissButton.setOnClickListener { fragmentManager?.popBackStack() }
-        bgAlpha.setOnTouchListener { t, event -> true }
+        bgAlpha.setOnClickListener{fragmentManager?.popBackStack()}
     }
 
     override fun onInfoPresent(name: String, subsCount: String, desc: String, lastPost: String, url: String) {

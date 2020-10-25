@@ -14,6 +14,7 @@ import com.grind.vksociety.R
 import com.grind.vksociety.adapters.SocietyListAdapter
 import com.grind.vksociety.models.Society
 import com.grind.vksociety.presenters.SocietyListPresenter
+import com.grind.vksociety.redux.Action
 import com.grind.vksociety.utils.ItemOffsetDecoration
 import com.grind.vksociety.utils.SocietyDiffUtilCallback
 import com.grind.vksociety.views.ISocietyListView
@@ -64,12 +65,20 @@ class SocietyListFragment : Fragment(), ISocietyListView {
         rv.addItemDecoration(ItemOffsetDecoration(8))
         rv.layoutManager = lm
         rv.adapter = adapter
+        rv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                if(!rv.canScrollVertically(1)){
+                    presenter.reduceAction(Action.NewPage<Society>(adapter.itemCount, adapter.getItems()))
+                }
+            }
+        })
         return v
     }
 
     override fun onStart() {
         super.onStart()
-        presenter.getSocietyList()
+        presenter.reduceAction(Action.NewPage<Society>(0, listOf()))
         unsubscribeButton.setOnClickListener {
             presenter.unsubscribeGroups(listForUnsubscribe)
             adapter.selectedList.clear()
@@ -79,9 +88,12 @@ class SocietyListFragment : Fragment(), ISocietyListView {
 
     override fun onListPresent(items: List<Society>) {
         listForUnsubscribe.clear()
-        val callback = SocietyDiffUtilCallback(adapter.getItems(), items)
+        val newList = mutableListOf<Society>()
+        newList.addAll(adapter.getItems())
+        newList.addAll(items)
+        val callback = SocietyDiffUtilCallback(adapter.getItems(), newList)
         val diffResult = DiffUtil.calculateDiff(callback)
-        adapter.setItems(items)
+        adapter.setItems(newList)
         diffResult.dispatchUpdatesTo(adapter)
     }
 }

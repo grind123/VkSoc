@@ -1,9 +1,14 @@
 package com.grind.vksociety.presenters
 
 import android.util.Log
+import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import com.google.gson.Gson
+import com.grind.vksociety.App
 import com.grind.vksociety.models.Society
+import com.grind.vksociety.redux.Action
+import com.grind.vksociety.redux.SideEffect
+import com.grind.vksociety.redux.Store
 import com.grind.vksociety.views.ISocietyListView
 import com.vk.api.sdk.VK
 import com.vk.api.sdk.VKApiCallback
@@ -17,14 +22,31 @@ import kotlin.concurrent.thread
 
 class SocietyListPresenter(view: ISocietyListView) : ISocietyListPresenter {
     private val v = view
+    val store = Store<Society>()
 
-    override fun getSocietyList() {
+    fun reduceAction(action: Action){
+        val newState = store.reducer.reduce<Society>(action,
+            store.state,
+            { when(it){
+                is SideEffect.LoadPage -> thread(start = true) {
+                    getSocietyList(it.offset)
+                }
+                is SideEffect.EventError -> Toast.makeText(App.appContext, "Event Error", Toast.LENGTH_SHORT).show()
+            } }
+        )
+        store.state = newState
+    }
+
+    override fun getSocietyList(offset: Int) {
         val request = VKRequest<JSONObject>("groups.get")
         request.addParam("extended", 1)
         request.addParam("fields", "description,activity,members_count")
+        request.addParam("count", 12)
+        request.addParam("offset", offset)
         VK.execute(request, object : VKApiCallback<JSONObject> {
             override fun fail(error: Exception) {
                 Log.e("getSocietyList", error.message)
+                reduceAction(Action.LoadError(error))
             }
 
             override fun success(result: JSONObject) {
@@ -38,7 +60,9 @@ class SocietyListPresenter(view: ISocietyListView) : ISocietyListPresenter {
                     list.add(item)
                     Log.e("SocietyItem", item.toString())
                 }
-                v.onListPresent(list.reversed())
+                val action = Action.LoadSuccess(offset, list.reversed())
+                reduceAction(action)
+                v.onListPresent(action.data)
             }
         })
     }
@@ -50,7 +74,7 @@ class SocietyListPresenter(view: ISocietyListView) : ISocietyListPresenter {
                 val int = response.getInt("response")
                 Log.e("Unsub", "$int")
             }
-            getSocietyList()
+//            getSocietyList()
         }
     }
 
@@ -60,4 +84,5 @@ class SocietyListPresenter(view: ISocietyListView) : ISocietyListPresenter {
         return VK.executeSync(request)
 
     }
+
 }

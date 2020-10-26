@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:orientation="horizontal">
+        <ImageView
+            android:id="@+id/imv_back"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_back"
+            android:layout_marginStart="12dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="22dp"
+            android:text="Моя активность"
+            android:textSize="24sp"
+            android:fontFamily="sans-serif-medium"
+            android:textColor="@android:color/black"
+            android:gravity="center_vertical"/>
+    </LinearLayout>
+    
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/light_separator"
+        android:layout_marginHorizontal="16dp"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="14.5dp">
+        <TextView
+            android:id="@+id/tv_activity_range"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="За последние 30 дней"
+            android:textColor="@android:color/black"
+            android:fontFamily="sans-serif-medium"
+            android:textSize="16sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toRightOf="parent"/>
+
+        <ImageView
+            android:id="@+id/ic1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:src="@drawable/ic_community"
+            app:layout_constraintTop_toBottomOf="@id/tv_activity_range"
+            app:layout_constraintLeft_toLeftOf="parent"
+            />
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:textSize="15sp"
+            android:textColor="@color/light_text"
+            app:layout_constraintLeft_toRightOf="@id/ic1"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/ic1" />
+
+        <ImageView
+            android:id="@+id/ic2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:src="@drawable/ic_news_feed"
+            app:layout_constraintTop_toBottomOf="@id/tv_name"
+            app:layout_constraintLeft_toLeftOf="parent"
+            />
+
+        <TextView
+            android:id="@+id/tv_my_activity"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:textSize="15sp"
+            android:textColor="@color/light_text"
+            app:layout_constraintLeft_toRightOf="@id/ic2"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/ic2" />
+
+        <ImageView
+            android:id="@+id/ic3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:src="@drawable/ic_like"
+            app:layout_constraintTop_toBottomOf="@id/tv_my_activity"
+            app:layout_constraintLeft_toLeftOf="parent"
+            />
+
+        <TextView
+            android:id="@+id/tv_likes"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:textSize="15sp"
+            android:textColor="@color/light_text"
+            app:layout_constraintLeft_toRightOf="@id/ic3"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/ic3" />
+
+        <ImageView
+            android:id="@+id/ic4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:src="@drawable/ic_comment"
+            app:layout_constraintTop_toBottomOf="@id/tv_likes"
+            app:layout_constraintLeft_toLeftOf="parent"
+            />
+
+        <TextView
+            android:id="@+id/tv_comments"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:textSize="15sp"
+            android:textColor="@color/light_text"
+            app:layout_constraintLeft_toRightOf="@id/ic4"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/ic4" />
+
+        <ImageView
+            android:id="@+id/ic5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:src="@drawable/ic_repost"
+            app:layout_constraintTop_toBottomOf="@id/tv_comments"
+            app:layout_constraintLeft_toLeftOf="parent"
+            />
+
+        <TextView
+            android:id="@+id/tv_reposts"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:textSize="15sp"
+            android:textColor="@color/light_text"
+            app:layout_constraintLeft_toRightOf="@id/ic5"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/ic5" />
+
+        <LinearLayout
+            android:id="@+id/ll_conclusion"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:padding="12dp"
+            android:orientation="vertical"
+            android:background="@drawable/bg_round_corners_10"
+            android:backgroundTint="@color/light_background"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_reposts">
+            <TextView
+                android:id="@+id/tv_conclusion_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Ваша активность низкая"
+                android:textColor="@android:color/black"
+                android:fontFamily="sans-serif-medium"
+                android:textSize="16sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintRight_toRightOf="parent"/>
+
+            <TextView
+                android:id="@+id/tv_conclusive_desc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="@string/low_activity_desc"
+                android:textSize="15sp"
+                android:textColor="@color/light_text"
+                app:layout_constraintLeft_toRightOf="@id/ic5"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@id/ic5" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_action_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingVertical="12dp"
+            android:layout_marginTop="12dp"
+            android:gravity="center"
+            android:text="Отписаться"
+            android:textColor="@color/blue_button_text"
+            android:textSize="16sp"
+            android:background="@drawable/bg_stroke_blue_button_normal"
+            android:fontFamily="sans-serif-medium"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ll_conclusion"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>

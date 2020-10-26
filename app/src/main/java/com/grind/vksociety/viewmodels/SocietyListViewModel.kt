@@ -1,43 +1,47 @@
-package com.grind.vksociety.presenters
+package com.grind.vksociety.viewmodels
 
 import android.util.Log
 import android.widget.Toast
-import androidx.recyclerview.widget.DiffUtil
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
 import com.grind.vksociety.App
 import com.grind.vksociety.models.Society
 import com.grind.vksociety.redux.Action
 import com.grind.vksociety.redux.SideEffect
 import com.grind.vksociety.redux.Store
-import com.grind.vksociety.views.ISocietyListView
 import com.vk.api.sdk.VK
 import com.vk.api.sdk.VKApiCallback
-import com.vk.api.sdk.requests.VKBooleanRequest
 import com.vk.api.sdk.requests.VKRequest
 import org.json.JSONObject
-import java.util.concurrent.Callable
-import java.util.concurrent.Executors
-import java.util.concurrent.Future
 import kotlin.concurrent.thread
 
-class SocietyListPresenter(view: ISocietyListView) : ISocietyListPresenter {
-    private val v = view
-    val store = Store<Society>()
+class SocietyListViewModel : ViewModel() {
 
-    fun reduceAction(action: Action){
+    private val store = Store<Society>()
+
+    val societyListData: LiveData<List<Society>> = MutableLiveData<List<Society>>()
+
+    fun reduceAction(action: Action) {
         val newState = store.reducer.reduce<Society>(action,
-            store.state,
-            { when(it){
+            store.state
+        ) {
+            when (it) {
                 is SideEffect.LoadPage -> thread(start = true) {
                     getSocietyList(it.offset)
                 }
-                is SideEffect.EventError -> Toast.makeText(App.appContext, "Event Error", Toast.LENGTH_SHORT).show()
-            } }
-        )
+                is SideEffect.EventError -> Toast.makeText(
+                    App.appContext,
+                    "Event Error",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
         store.state = newState
     }
 
-    override fun getSocietyList(offset: Int) {
+    fun getSocietyList(offset: Int) {
         val request = VKRequest<JSONObject>("groups.get")
         request.addParam("extended", 1)
         request.addParam("fields", "description,activity,members_count")
@@ -62,12 +66,12 @@ class SocietyListPresenter(view: ISocietyListView) : ISocietyListPresenter {
                 }
                 val action = Action.LoadSuccess(offset, list.reversed())
                 reduceAction(action)
-                v.onListPresent(action.data)
+                (societyListData as MutableLiveData).postValue(action.data)
             }
         })
     }
 
-    override fun unsubscribeGroups(listOfId: List<Long>) {
+    fun unsubscribeGroups(listOfId: List<Long>) {
         thread(start = true) {
             for (id in listOfId) {
                 val response = unsubscribe(id)
@@ -84,5 +88,4 @@ class SocietyListPresenter(view: ISocietyListView) : ISocietyListPresenter {
         return VK.executeSync(request)
 
     }
-
 }

@@ -23,88 +23,167 @@
             android:background="@drawable/bg_white_corners"
             android:padding="16dp">
 
+            <ImageView
+                android:id="@+id/imv_close"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_cancel"
+                app:layout_constraintTop_toTopOf="@id/tv_title"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintBottom_toBottomOf="@id/tv_title"/>
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="22dp"
+                android:textColor="@android:color/black"
+                android:text="Подробнее"
+                android:textSize="24sp"
+                android:fontFamily="sans-serif-medium"
+                app:layout_constraintLeft_toRightOf="@id/imv_close"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintRight_toRightOf="parent"/>
+
+
+            <ImageView
+                android:id="@+id/ic0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="28dp"
+                android:src="@drawable/ic_community"
+                app:layout_constraintTop_toBottomOf="@id/imv_close"
+                app:layout_constraintLeft_toLeftOf="parent"
+                 />
+
             <TextView
                 android:id="@+id/tv_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="16dp"
-                android:textColor="@color/titleTextColor"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@id/imv_dismiss"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/imv_dismiss"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_dismiss_24"
-                app:layout_constraintDimensionRatio="1:1"
+                android:layout_marginLeft="16dp"
+                android:textSize="15sp"
+                android:textColor="@color/light_text"
+                app:layout_constraintLeft_toRightOf="@id/ic0"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="@id/ic0" />
 
             <ImageView
                 android:id="@+id/ic1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:src="@drawable/ic_followers_outline_20"
-                android:tint="@color/hintTextColor"
+                android:layout_marginTop="22dp"
+                android:src="@drawable/ic_followers"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_name" />
+                app:layout_constraintTop_toBottomOf="@id/tv_desc" />
 
             <TextView
                 android:id="@+id/tv_subs_count"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-
                 android:layout_marginLeft="16dp"
-                android:textColor="@color/titleTextColor"
+                android:layout_marginRight="16dp"
+                android:textSize="15sp"
+                android:textColor="@color/light_text"
                 app:layout_constraintLeft_toRightOf="@id/ic1"
-                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/imv_friend_1"
                 app:layout_constraintTop_toTopOf="@id/ic1" />
+            
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/imv_friend_3"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:foreground="@drawable/small_avatar_stroke"
+                app:layout_constraintTop_toTopOf="@id/tv_subs_count"
+                app:layout_constraintBottom_toBottomOf="@id/tv_subs_count"
+                app:layout_constraintRight_toRightOf="parent"/>
 
-            <ImageView
-                android:id="@+id/ic2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:src="@drawable/ic_article_outline_20"
-                android:tint="@color/hintTextColor"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_subs_count" />
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/imv_friend_2"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginEnd="18dp"
+                android:foreground="@drawable/small_avatar_stroke"
+                app:layout_constraintTop_toTopOf="@id/tv_subs_count"
+                app:layout_constraintBottom_toBottomOf="@id/tv_subs_count"
+                app:layout_constraintRight_toRightOf="@id/imv_friend_3"/>
 
-            <TextView
-                android:id="@+id/tv_desc"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/imv_friend_1"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginEnd="18dp"
+                android:foreground="@drawable/small_avatar_stroke"
+                app:layout_constraintTop_toTopOf="@id/tv_subs_count"
+                app:layout_constraintBottom_toBottomOf="@id/tv_subs_count"
+                app:layout_constraintRight_toRightOf="@id/imv_friend_2"/>
 
-                android:layout_marginLeft="16dp"
-                android:textColor="@color/titleTextColor"
-                app:layout_constraintLeft_toRightOf="@id/ic2"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="@id/ic2" />
+
 
             <ImageView
                 android:id="@+id/ic3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:src="@drawable/ic_newsfeed_outline_20"
-                android:tint="@color/hintTextColor"
+                android:layout_marginTop="22dp"
+                android:src="@drawable/ic_news_feed"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_desc" />
+                app:layout_constraintTop_toBottomOf="@id/tv_subs_count" />
 
             <TextView
                 android:id="@+id/tv_last_post"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
-                android:textColor="@color/titleTextColor"
+                android:textSize="15sp"
+                android:textColor="@color/light_text"
                 app:layout_constraintLeft_toRightOf="@id/ic3"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="@id/ic3" />
+
+            <ImageView
+                android:id="@+id/ic2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="22dp"
+                android:visibility="gone"
+                android:src="@drawable/ic_desc"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_name" />
+
+            <TextView
+                android:id="@+id/tv_desc"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:textSize="15sp"
+                android:visibility="gone"
+                android:maxLines="6"
+                android:ellipsize="end"
+                android:textColor="@android:color/black"
+                app:layout_constraintLeft_toRightOf="@id/ic2"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@id/ic2" />
+
+            <ImageView
+                android:id="@+id/ic4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="22dp"
+                android:src="@drawable/ic_user"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_last_post" />
+
+            <TextView
+                android:id="@+id/tv_my_activity"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:text="Моя активность в сообществе"
+                android:fontFamily="sans-serif-medium"
+                android:textSize="15sp"
+                android:textColor="@color/colorAccent"
+                app:layout_constraintLeft_toRightOf="@id/ic4"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@id/ic4" />
 
             <TextView
                 android:id="@+id/tv_open_button"
@@ -115,12 +194,13 @@
                 android:gravity="center"
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"
-                android:text="Открыть"
+                android:textSize="16sp"
+                android:text="Перейти в сообщество"
                 android:textColor="@android:color/white"
-                android:textStyle="bold"
+                android:fontFamily="sans-serif-medium"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/ic3" />
+                app:layout_constraintTop_toBottomOf="@id/ic4" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>

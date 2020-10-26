@@ -1,10 +1,13 @@
 package com.grind.vksociety
 
+import android.app.Activity
 import android.content.Intent
+import android.graphics.Point
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.FragmentTransaction
 import com.grind.vksociety.fragments.SocietyListFragment
 import com.vk.api.sdk.VK
@@ -12,6 +15,13 @@ import com.vk.api.sdk.auth.VKAccessToken
 import com.vk.api.sdk.auth.VKAuthCallback
 import com.vk.api.sdk.auth.VKScope
 import com.vk.api.sdk.utils.VKUtils.getDisplayMetrics
+
+fun Activity.getScreenWidth(): Int{
+    val defaultDisplay = this.windowManager.defaultDisplay
+    val point = Point()
+    defaultDisplay.getSize(point)
+    return point.x
+}
 
 class MainActivity : AppCompatActivity() {
 

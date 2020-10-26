@@ -1,6 +1,8 @@
 package com.grind.vksociety.adapters
 
 import android.content.res.Resources
+import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
@@ -17,6 +19,7 @@ val Int.toPx: Int
 
 
 class SocietyListAdapter(private val listener: OnItemClickListener): RecyclerView.Adapter<SocietyListAdapter.SocietyHolder>() {
+
 
     private var items = listOf<Society>()
     private var logoHeight = (App.screenWidth - (16).toPx - (8*6).toPx) / 3
@@ -51,7 +54,10 @@ class SocietyListAdapter(private val listener: OnItemClickListener): RecyclerVie
         holder.name.text = item.name
         Glide.with(holder.itemView).load(item.logoUrl).centerInside().into(holder.logo)
 
-        holder.itemView.setOnClickListener{listener.onItemClick(item)}
+        holder.itemView.setOnClickListener{
+//            Log.i("Coordinates", "x = ${holder.itemView.x}; y = ${holder.itemView.y}")
+            listener.onItemClick(item)
+        }
         holder.itemView.setOnLongClickListener {
             listener.onLongItemClick(item.id)
             if(holder.checkFrame.visibility == View.INVISIBLE){

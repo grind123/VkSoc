@@ -2,6 +2,9 @@
     <string name="app_name">VkSociety</string>
     <string name="main_hint">Коснитесь и удерживайте, чтобы увидеть информацию о сообществе</string>
     <string name="main_title">Отписаться от сообществ</string>
+    <string name="low_activity_title">Ваша активность низкая</string>
     <string name="low_activity_desc">На основании ваших действий, мы предполагаем, что данное сообщество вам больше не интересно и его можно покинуть</string>
+    <string name="high_activity_title">Ваша активность высокая</string>
+    <string name="high_activity_desc">На основании ваших действий, мы предполагаем, что данное сообщество вам интересно и его не нужно покидать</string>
     <integer name="com_vk_sdk_AppId">7338448</integer>
 </resources>

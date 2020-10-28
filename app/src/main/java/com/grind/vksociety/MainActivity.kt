@@ -2,6 +2,7 @@ package com.grind.vksociety
 
 import android.app.Activity
 import android.content.Intent
+import android.content.res.Resources
 import android.graphics.Point
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -9,12 +10,18 @@ import android.util.DisplayMetrics
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.FragmentTransaction
+import com.grind.vksociety.fragments.MainFragment
 import com.grind.vksociety.fragments.SocietyListFragment
 import com.vk.api.sdk.VK
 import com.vk.api.sdk.auth.VKAccessToken
 import com.vk.api.sdk.auth.VKAuthCallback
 import com.vk.api.sdk.auth.VKScope
 import com.vk.api.sdk.utils.VKUtils.getDisplayMetrics
+
+fun Int.toPx(): Int{
+    return (this * Resources.getSystem().displayMetrics.density).toInt()
+}
+
 
 fun Activity.getScreenWidth(): Int{
     val defaultDisplay = this.windowManager.defaultDisplay
@@ -45,7 +52,7 @@ class MainActivity : AppCompatActivity() {
                 override fun onLogin(token: VKAccessToken) {
                     App.vkAccessKey = token.accessToken
                     supportFragmentManager.beginTransaction()
-                        .add(R.id.main_container, SocietyListFragment())
+                        .add(R.id.main_container, MainFragment())
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                         .commitAllowingStateLoss()
                 }

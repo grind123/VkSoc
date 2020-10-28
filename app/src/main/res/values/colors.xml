@@ -19,5 +19,5 @@
     <color name="light_background">#F2F3F5</color>
     <color name="blue_button_text">#3F8AE0</color>
     <color name="green_text">#3DAB3D</color>
-    <color name="green_bg">#D3F3D3</color>
+    <color name="light_green_bg">#D3F3D3</color>
 </resources>

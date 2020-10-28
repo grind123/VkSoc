@@ -35,11 +35,10 @@ class SocietyListFragment : Fragment(){
     private val listForUnsubscribe = mutableListOf<Long>()
     private lateinit var viewModel: SocietyListViewModel
 
-    private lateinit var title: TextView
     private lateinit var rv: RecyclerView
     private lateinit var adapter: SocietyListAdapter
     private lateinit var unsubscribeButton: TextView
-    private val lm = DisabledScrollGridLayoutManager(context, 3)
+    private lateinit var lm: DisabledScrollGridLayoutManager
 
 //    private val slideAndPickTouchListener: View.OnTouchListener = object : View.OnTouchListener{
 //        override fun onTouch(v: View?, event: MotionEvent?): Boolean {
@@ -114,7 +113,6 @@ class SocietyListFragment : Fragment(){
         savedInstanceState: Bundle?
     ): View? {
         val v = View.inflate(context, R.layout.fragmetn_society_list, null)
-        title = v.findViewById(R.id.tv_title)
         rv = v.findViewById(R.id.rv)
         unsubscribeButton = v.findViewById(R.id.tv_unsubscribe_button)
 
@@ -137,6 +135,7 @@ class SocietyListFragment : Fragment(){
             adapter.setItems(newList)
             diffResult.dispatchUpdatesTo(adapter)
         })
+
         viewModel.reduceAction(Action.NewPage<Society>(0, listOf()))
 
         return v
@@ -148,7 +147,7 @@ class SocietyListFragment : Fragment(){
                 fragmentManager!!.beginTransaction()
                     .add(R.id.main_container, SocietyInfoFragment()
                         .apply {
-                            arguments = Bundle().apply { putSerializable("item", currSociety) }
+                            arguments = Bundle().apply { putParcelable("item", currSociety) }
                         })
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                     .addToBackStack(this.javaClass.simpleName)
@@ -172,7 +171,8 @@ class SocietyListFragment : Fragment(){
     }
 
     private fun initRecyclerView(){
-        rv.addItemDecoration(ItemOffsetDecoration(8))
+//        rv.addItemDecoration(ItemOffsetDecoration(0))
+        lm = DisabledScrollGridLayoutManager(context, 3)
         rv.layoutManager = lm
         rv.adapter = adapter
         rv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -197,5 +197,20 @@ class SocietyListFragment : Fragment(){
                 it.findViewById<View>(R.id.cl_check_frame).visibility = View.VISIBLE
             }
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.i("Lifecycle", "onStop")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.i("Lifecycle", "onDestroy")
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        Log.i("Lifecycle", "onDetach")
     }
 }

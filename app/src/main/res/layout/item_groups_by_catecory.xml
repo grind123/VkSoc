@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingTop="16dp">
+
+    <include layout="@layout/item_society"
+        android:id="@+id/item_1"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:visibility="gone"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/item_2"
+        app:layout_constraintTop_toBottomOf="@id/tv_category_name"
+        />
+
+    <include layout="@layout/item_society"
+        android:id="@+id/item_2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintLeft_toRightOf="@id/item_1"
+        app:layout_constraintRight_toLeftOf="@id/item_3"
+        app:layout_constraintTop_toTopOf="@id/item_1"
+        />
+
+    <include layout="@layout/item_society"
+        android:id="@+id/item_3"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintLeft_toRightOf="@id/item_2"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/item_1"
+        />
+
+    <include layout="@layout/item_society"
+        android:id="@+id/item_4"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/item_5"
+        app:layout_constraintTop_toBottomOf="@id/item_1"
+        />
+
+    <include layout="@layout/item_society"
+        android:id="@+id/item_5"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintLeft_toRightOf="@id/item_4"
+        app:layout_constraintRight_toLeftOf="@id/item_6"
+        app:layout_constraintTop_toTopOf="@id/item_4"
+        />
+
+    <include layout="@layout/item_society"
+        android:id="@+id/item_6"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintLeft_toRightOf="@id/item_5"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/item_4"
+        />
+
+    <TextView
+        android:id="@+id/tv_category_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="Видеоигры"
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        android:fontFamily="sans-serif-medium"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/tv_group_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="6dp"
+        android:text="12"
+        android:textSize="16sp"
+        android:textColor="@color/light_text"
+        app:layout_constraintLeft_toRightOf="@id/tv_category_name"
+        app:layout_constraintTop_toTopOf="@id/tv_category_name"/>
+
+    <TextView
+        android:id="@+id/tv_show_all_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="6dp"
+        android:text="Показать все"
+        android:layout_marginEnd="16dp"
+        android:textSize="16sp"
+        android:textColor="@color/blue_button_text"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tv_category_name"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

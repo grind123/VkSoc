@@ -41,7 +41,7 @@ class SocietyListViewModel : ViewModel() {
         store.state = newState
     }
 
-    fun getSocietyList(offset: Int) {
+    private fun getSocietyList(offset: Int) {
         val request = VKRequest<JSONObject>("groups.get")
         request.addParam("extended", 1)
         request.addParam("fields", "description,activity,members_count")

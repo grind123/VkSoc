@@ -1,35 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="16dp">
+    android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/tv_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:textColor="@color/titleTextColor"
-        android:textSize="18sp"
-        android:text="@string/main_title"
-        android:textStyle="bold"/>
+<!--    <TextView-->
+<!--        android:id="@+id/tv_title"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:gravity="center"-->
+<!--        android:textColor="@color/titleTextColor"-->
+<!--        android:textSize="18sp"-->
+<!--        android:text="@string/main_title"-->
+<!--        android:textStyle="bold"/>-->
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_marginLeft="32dp"
-        android:layout_marginRight="32dp"
-        android:layout_marginTop="8dp"
-        android:textColor="@color/hintTextColor"
-        android:text="@string/main_hint" />
+<!--    <TextView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:gravity="center"-->
+<!--        android:layout_marginLeft="32dp"-->
+<!--        android:layout_marginRight="32dp"-->
+<!--        android:layout_marginTop="8dp"-->
+<!--        android:textColor="@color/hintTextColor"-->
+<!--        android:text="@string/main_hint" />-->
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_marginTop="8dp"/>
+        android:layout_weight="1"/>
 
     <TextView
         android:id="@+id/tv_unsubscribe_button"
@@ -42,6 +40,8 @@
         android:paddingBottom="8dp"
         android:text="Отписаться"
         android:visibility="gone"
+        android:layout_marginBottom="16dp"
+        android:layout_marginHorizontal="16dp"
         android:textColor="@android:color/white"
         android:textStyle="bold"/>
 

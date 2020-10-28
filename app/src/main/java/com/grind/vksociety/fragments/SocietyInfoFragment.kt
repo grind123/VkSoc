@@ -10,14 +10,16 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.grind.vksociety.App
 import com.grind.vksociety.R
 import com.grind.vksociety.models.Friend
 import com.grind.vksociety.models.Society
-import com.grind.vksociety.models.dateFormat
-import com.grind.vksociety.models.membersCountFormat
+import com.grind.vksociety.models.toDateFormat
+import com.grind.vksociety.models.toMembersCountFormat
 import com.grind.vksociety.viewmodels.SocietyInfoViewModel
 
 
@@ -43,6 +45,7 @@ class SocietyInfoFragment: Fragment(){
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        val currSociety = arguments?.getParcelable<Society>("item")!!
         val v = View.inflate(context, R.layout.fragment_info, null)
         name = v.findViewById(R.id.tv_name)
         description = v.findViewById(R.id.tv_desc)
@@ -66,11 +69,20 @@ class SocietyInfoFragment: Fragment(){
                     }
                 }
 
-                this.subsCount.text = "${info.membersCountFormat(info.membersCount)} подписчиков • ${info.friendsInSociety.size} друзей"
-                this.lastPost.text = "Последняя запись ${info.dateFormat(info.lastPostDate)}"
+                this.subsCount.text = "${info.membersCount.toMembersCountFormat()} подписчиков • ${info.friendsInSociety.size} друзей"
+                this.lastPost.text = "Последняя запись ${info.lastPostDate.toDateFormat()}"
                 loadFriendsAvatars(info.friendsInSociety)
                 myActivity.setOnClickListener {
-                    //TODO next fragment
+                    val fragment = MyActivityFragment().apply {
+                        arguments = Bundle().apply {
+                            putParcelable("item", currSociety)
+                        }
+                    }
+                    fragmentManager?.beginTransaction()
+                        ?.add(R.id.main_container, fragment)
+                        ?.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                        ?.addToBackStack(fragment::class.java.simpleName)
+                        ?.commit()
                 }
                 openButton.setOnClickListener {
                     val intent = Intent(Intent.ACTION_VIEW)
@@ -81,7 +93,7 @@ class SocietyInfoFragment: Fragment(){
 
         })
 
-        viewModel.getSocietyInfo(arguments?.getSerializable("item") as Society)
+        viewModel.getSocietyInfo(currSociety)
         return v
     }
 

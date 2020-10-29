@@ -45,7 +45,7 @@ class SocietyListViewModel : ViewModel() {
         val request = VKRequest<JSONObject>("groups.get")
         request.addParam("extended", 1)
         request.addParam("fields", "description,activity,members_count")
-        request.addParam("count", 12)
+        request.addParam("count", 50)
         request.addParam("offset", offset)
         VK.execute(request, object : VKApiCallback<JSONObject> {
             override fun fail(error: Exception) {
@@ -54,7 +54,7 @@ class SocietyListViewModel : ViewModel() {
             }
 
             override fun success(result: JSONObject) {
-                Log.e("getSocietyList", result.toString())
+//                Log.e("getSocietyList", result.toString())
                 val list = mutableListOf<Society>()
                 val items = result.getJSONObject("response")
                     .getJSONArray("items")
@@ -71,21 +71,5 @@ class SocietyListViewModel : ViewModel() {
         })
     }
 
-    fun unsubscribeGroups(listOfId: List<Long>) {
-        thread(start = true) {
-            for (id in listOfId) {
-                val response = unsubscribe(id)
-                val int = response.getInt("response")
-                Log.e("Unsub", "$int")
-            }
-//            getSocietyList()
-        }
-    }
 
-    private fun unsubscribe(id: Long): JSONObject {
-        val request = VKRequest<JSONObject>("groups.leave")
-            .addParam("group_id", id)
-        return VK.executeSync(request)
-
-    }
 }

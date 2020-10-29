@@ -1,38 +1,31 @@
 package com.grind.vksociety.fragments
 
 import android.content.Context
-import android.graphics.Point
 import android.graphics.Rect
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.grind.vksociety.App
 import com.grind.vksociety.R
 import com.grind.vksociety.adapters.SocietyListAdapter
 import com.grind.vksociety.custom.DisabledScrollGridLayoutManager
-import com.grind.vksociety.getScreenWidth
 import com.grind.vksociety.models.Society
 import com.grind.vksociety.redux.Action
-import com.grind.vksociety.utils.ItemOffsetDecoration
 import com.grind.vksociety.utils.SocietyDiffUtilCallback
 import com.grind.vksociety.viewmodels.SocietyListViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-class SocietyListFragment : Fragment(){
-
-    private val listForUnsubscribe = mutableListOf<Long>()
+class SocietyListFragment(private val listener: OnGroupItemsListener) : Fragment() {
     private lateinit var viewModel: SocietyListViewModel
 
     private lateinit var rv: RecyclerView
@@ -103,8 +96,10 @@ class SocietyListFragment : Fragment(){
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        viewModel = ViewModelProvider(this,
-            ViewModelProvider.AndroidViewModelFactory(App())).get(SocietyListViewModel::class.java)
+        viewModel = ViewModelProvider(
+            this,
+            ViewModelProvider.AndroidViewModelFactory(App())
+        ).get(SocietyListViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -118,15 +113,11 @@ class SocietyListFragment : Fragment(){
 
         initAdapter()
         initRecyclerView()
+        initListeners()
 
-        unsubscribeButton.setOnClickListener {
-            viewModel.unsubscribeGroups(listForUnsubscribe)
-            adapter.selectedList.clear()
-            unsubscribeButton.visibility = View.GONE
-        }
 
-        viewModel.societyListData.observe({lifecycle}, {
-            listForUnsubscribe.clear()
+        viewModel.societyListData.observe({ lifecycle }, {
+//            listForUnsubscribe.clear()
             val newList = mutableListOf<Society>()
             newList.addAll(adapter.getItems())
             newList.addAll(it)
@@ -141,37 +132,36 @@ class SocietyListFragment : Fragment(){
         return v
     }
 
-    private fun initAdapter(){
-        adapter = SocietyListAdapter(object : SocietyListAdapter.OnItemClickListener {
-            override fun onItemClick(currSociety: Society) {
-                fragmentManager!!.beginTransaction()
-                    .add(R.id.main_container, SocietyInfoFragment()
-                        .apply {
-                            arguments = Bundle().apply { putParcelable("item", currSociety) }
-                        })
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                    .addToBackStack(this.javaClass.simpleName)
-                    .commit()
-            }
+    private fun initListeners() {
+        unsubscribeButton.setOnClickListener {
+            listener.unsubscribe(adapter.selectedItemsList.toList())
+            val newList = adapter.getItems().filter { !adapter.selectedItemsList.contains(it.id) }.toMutableList()
+            val callback = SocietyDiffUtilCallback(adapter.getItems(), newList)
+            adapter.setItems(newList)
+            DiffUtil.calculateDiff(callback).dispatchUpdatesTo(adapter)
+            adapter.selectedItemsList.clear()
+            listener.onSelectItemsCountChanged(adapter.selectedItemsList.size)
+            unsubscribeButton.visibility = View.GONE
 
-            override fun onLongItemClick(societyId: Long) {
-                if (listForUnsubscribe.contains(societyId)) {
-                    listForUnsubscribe.remove(societyId)
-                } else {
-                    listForUnsubscribe.add(societyId)
+        }
+    }
+
+
+    private fun initAdapter() {
+        adapter =
+            SocietyListAdapter(listener, object : SocietyListAdapter.OnGroupItemLongClickListener {
+                override fun onLongItemClick(societyId: Long, selectedItemsCount: Int) {
+                    if (selectedItemsCount > 0) {
+                        unsubscribeButton.visibility = View.VISIBLE
+                    } else {
+                        unsubscribeButton.visibility = View.GONE
+                    }
                 }
-                if (listForUnsubscribe.isNotEmpty()) {
-                    unsubscribeButton.visibility = View.VISIBLE
-                } else {
-                    unsubscribeButton.visibility = View.GONE
-                }
-            }
-        })
+            })
 
     }
 
-    private fun initRecyclerView(){
-//        rv.addItemDecoration(ItemOffsetDecoration(0))
+    private fun initRecyclerView() {
         lm = DisabledScrollGridLayoutManager(context, 3)
         rv.layoutManager = lm
         rv.adapter = adapter
@@ -190,13 +180,10 @@ class SocietyListFragment : Fragment(){
         })
     }
 
-    private fun highlightView(x: Float, y: Float, data: List<View>){
-        data.forEach {
-            val rect = Rect(it.left, it.top, it.right, it.bottom)
-            if(rect.contains(x.toInt(), y.toInt())){
-                it.findViewById<View>(R.id.cl_check_frame).visibility = View.VISIBLE
-            }
-        }
+    fun clearAllSelectedGroups() {
+        adapter.clearAllSelectedItems()
+        unsubscribeButton.visibility = View.GONE
+        listener.onSelectItemsCountChanged(adapter.selectedItemsList.size)
     }
 
     override fun onStop() {

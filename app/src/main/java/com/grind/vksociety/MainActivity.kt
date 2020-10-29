@@ -13,6 +13,7 @@ import androidx.fragment.app.FragmentTransaction
 import com.grind.vksociety.fragments.MainFragment
 import com.grind.vksociety.fragments.SocietyListFragment
 import com.vk.api.sdk.VK
+import com.vk.api.sdk.VKApiConfig
 import com.vk.api.sdk.auth.VKAccessToken
 import com.vk.api.sdk.auth.VKAuthCallback
 import com.vk.api.sdk.auth.VKScope
@@ -39,6 +40,7 @@ class MainActivity : AppCompatActivity() {
 
         if (savedInstanceState == null) {
             VK.login(this, listOf(VKScope.GROUPS, VKScope.WALL))
+            VK.setConfig(VKApiConfig(context = applicationContext, lang = "ru", validationHandler = null))
         }
 
     }

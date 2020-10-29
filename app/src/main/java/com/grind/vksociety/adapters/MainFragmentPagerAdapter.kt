@@ -5,7 +5,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 
 class MainFragmentPagerAdapter(fm: FragmentManager,
-                               behavior: Int = BEHAVIOR_SET_USER_VISIBLE_HINT): FragmentPagerAdapter(fm, behavior) {
+                               behavior: Int = BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT): FragmentPagerAdapter(fm, behavior) {
 
     private val fragmentList = mutableListOf<Fragment>()
 
@@ -29,4 +29,6 @@ class MainFragmentPagerAdapter(fm: FragmentManager,
     fun addFragment(fragment: Fragment){
         fragmentList.add(fragment)
     }
+
+
 }

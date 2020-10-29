@@ -8,17 +8,21 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.grind.vksociety.App
 import com.grind.vksociety.R
+import com.grind.vksociety.fragments.OnGroupItemsListener
 import com.grind.vksociety.models.Society
 import de.hdodenhof.circleimageview.CircleImageView
 
 
-class SocietyListAdapter(private val listener: OnItemClickListener) :
+class SocietyListAdapter(
+    private val clickListener: OnGroupItemsListener,
+    private val longClickListener: OnGroupItemLongClickListener
+) :
     RecyclerView.Adapter<SocietyListAdapter.SocietyHolder>() {
 
 
-    private var items = listOf<Society>()
+    private var items = mutableListOf<Society>()
     private var containerHeight = App.screenWidth / 3
-    val selectedList = mutableListOf<Long>()
+    val selectedItemsList = mutableListOf<Long>()
 
     class SocietyHolder(v: View) : RecyclerView.ViewHolder(v) {
         val logo: CircleImageView = v.findViewById(R.id.cimv_logo)
@@ -28,7 +32,8 @@ class SocietyListAdapter(private val listener: OnItemClickListener) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SocietyHolder {
         val v = View.inflate(parent.context, R.layout.item_society, null).apply {
-            val layoutParams = LinearLayout.LayoutParams(containerHeight, LinearLayout.LayoutParams.WRAP_CONTENT)
+            val layoutParams =
+                LinearLayout.LayoutParams(containerHeight, LinearLayout.LayoutParams.WRAP_CONTENT)
             setLayoutParams(layoutParams)
         }
         return SocietyHolder(v)
@@ -40,7 +45,7 @@ class SocietyListAdapter(private val listener: OnItemClickListener) :
 
     override fun onBindViewHolder(holder: SocietyHolder, position: Int) {
         val item = items[position]
-        if (selectedList.contains(item.id)) {
+        if (selectedItemsList.contains(item.id)) {
             holder.checkFrame.visibility = View.VISIBLE
         } else {
             holder.checkFrame.visibility = View.INVISIBLE
@@ -51,32 +56,40 @@ class SocietyListAdapter(private val listener: OnItemClickListener) :
 
         holder.itemView.setOnClickListener {
 //            Log.i("Coordinates", "x = ${holder.itemView.x}; y = ${holder.itemView.y}")
-            listener.onItemClick(item)
+            clickListener.onItemClick(item)
         }
         holder.itemView.setOnLongClickListener {
-            listener.onLongItemClick(item.id)
             if (holder.checkFrame.visibility == View.INVISIBLE) {
                 holder.checkFrame.visibility = View.VISIBLE
-                selectedList.add(item.id)
+                selectedItemsList.add(item.id)
+                longClickListener.onLongItemClick(item.id, selectedItemsList.size)
+                clickListener.onSelectItemsCountChanged(selectedItemsList.size)
                 return@setOnLongClickListener true
             } else {
                 holder.checkFrame.visibility = View.INVISIBLE
-                selectedList.remove(item.id)
+                selectedItemsList.remove(item.id)
+                longClickListener.onLongItemClick(item.id, selectedItemsList.size)
+                clickListener.onSelectItemsCountChanged(selectedItemsList.size)
                 return@setOnLongClickListener true
             }
         }
     }
 
-    fun setItems(list: List<Society>) {
+    fun setItems(list: MutableList<Society>) {
         items = list
     }
 
-    fun getItems(): List<Society> {
+    fun getItems(): MutableList<Society> {
         return items
     }
 
-    interface OnItemClickListener {
-        fun onItemClick(currSociety: Society)
-        fun onLongItemClick(societyId: Long)
+    fun clearAllSelectedItems(){
+        selectedItemsList.clear()
+        notifyItemRangeChanged(0, items.size)
     }
+
+    interface OnGroupItemLongClickListener {
+        fun onLongItemClick(societyId: Long, selectedItemsCount: Int)
+    }
+
 }

@@ -1,7 +1,6 @@
 package com.grind.vksociety.fragments
 
 import android.content.Context
-import android.graphics.Rect
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -20,10 +19,6 @@ import com.grind.vksociety.models.Society
 import com.grind.vksociety.redux.Action
 import com.grind.vksociety.utils.SocietyDiffUtilCallback
 import com.grind.vksociety.viewmodels.SocietyListViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class SocietyListFragment(private val listener: OnGroupItemsListener) : Fragment() {
     private lateinit var viewModel: SocietyListViewModel
@@ -107,7 +102,7 @@ class SocietyListFragment(private val listener: OnGroupItemsListener) : Fragment
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val v = View.inflate(context, R.layout.fragmetn_society_list, null)
+        val v = View.inflate(context, R.layout.fragment_society_list, null)
         rv = v.findViewById(R.id.rv)
         unsubscribeButton = v.findViewById(R.id.tv_unsubscribe_button)
 

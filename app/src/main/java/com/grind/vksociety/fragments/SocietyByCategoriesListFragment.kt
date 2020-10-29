@@ -6,9 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,12 +14,10 @@ import com.grind.vksociety.App
 import com.grind.vksociety.R
 import com.grind.vksociety.adapters.SocietyByCategoryAdapter
 import com.grind.vksociety.adapters.SocietyListAdapter
-import com.grind.vksociety.models.Society
 import com.grind.vksociety.viewmodels.SocietyByCategoryViewModel
 
-class SocietyByCategoriesListFragment : Fragment(){
+class SocietyByCategoriesListFragment(private val listener: OnGroupItemsListener) : Fragment(){
 
-    private val listForUnsubscribe = mutableListOf<Long>()
     private lateinit var viewModel: SocietyByCategoryViewModel
 
     private lateinit var rv: RecyclerView
@@ -40,16 +36,18 @@ class SocietyByCategoriesListFragment : Fragment(){
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val v = View.inflate(context, R.layout.fragmetn_society_list, null)
+        val v = View.inflate(context, R.layout.fragment_society_list, null)
         rv = v.findViewById(R.id.rv)
         unsubscribeButton = v.findViewById(R.id.tv_unsubscribe_button)
 
-        initAdapter()
-        initRecyclerView()
+        adapter = initAdapter()
+        rv.layoutManager = LinearLayoutManager(context)
+        rv.adapter = adapter
 
         unsubscribeButton.setOnClickListener {
-//            viewModel.unsubscribeGroups(listForUnsubscribe)
-//            adapter?.selectedList?.clear()
+            listener.unsubscribe(adapter.selectedItemsList.toList())
+            unsubscribeNotifyAdapter(adapter)
+            listener.onSelectItemsCountChanged(adapter.selectedItemsList.size)
             unsubscribeButton.visibility = View.GONE
         }
 
@@ -65,50 +63,37 @@ class SocietyByCategoriesListFragment : Fragment(){
         return v
     }
 
-    private fun initAdapter(){
-        adapter = SocietyByCategoryAdapter(/*object : SocietyListAdapter.OnItemClickListener {
-            override fun onItemClick(currSociety: Society) {
-                fragmentManager!!.beginTransaction()
-                    .add(R.id.main_container, SocietyInfoFragment()
-                        .apply {
-                            arguments = Bundle().apply { putParcelable("item", currSociety) }
-                        })
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                    .addToBackStack(this.javaClass.simpleName)
-                    .commit()
-            }
-
-            override fun onLongItemClick(societyId: Long) {
-                if (listForUnsubscribe.contains(societyId)) {
-                    listForUnsubscribe.remove(societyId)
-                } else {
-                    listForUnsubscribe.add(societyId)
-                }
-                if (listForUnsubscribe.isNotEmpty()) {
+    private fun initAdapter(): SocietyByCategoryAdapter{
+        return SocietyByCategoryAdapter(listener, object : SocietyListAdapter.OnGroupItemLongClickListener {
+            override fun onLongItemClick(societyId: Long, selectedItemsCount: Int) {
+                if (selectedItemsCount > 0) {
                     unsubscribeButton.visibility = View.VISIBLE
                 } else {
                     unsubscribeButton.visibility = View.GONE
                 }
             }
-        }*/)
+        })
+
 
     }
 
-    private fun initRecyclerView(){
-        rv.layoutManager = LinearLayoutManager(context)
-        rv.adapter = adapter
-//        rv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-//            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-//                super.onScrolled(recyclerView, dx, dy)
-//                if (!rv.canScrollVertically(1)) {
-//                    viewModel.reduceAction(
-//                        Action.NewPage<Society>(
-//                            adapter.itemCount,
-//                            adapter.getItems()
-//                        )
-//                    )
-//                }
-//            }
-//        })
+    fun clearAllSelectedGroups() {
+        adapter.clearAllSelectedItems()
+        unsubscribeButton.visibility = View.GONE
+        listener.onSelectItemsCountChanged(adapter.selectedItemsList.size)
+    }
+
+    private fun unsubscribeNotifyAdapter(adapter: SocietyByCategoryAdapter){
+        val selectedItemsList = adapter.selectedItemsList
+//        val oldList = adapter.itemsList.toList()
+        adapter.itemsList.forEach { pair ->
+            val filter = pair.second.filter { selectedItemsList.contains(it.id) }
+            pair.second.removeAll(filter)
+        }
+        adapter.selectedItemsList.clear()
+        adapter.notifyItemRangeChanged(0, adapter.itemCount)
+//        val callback =
+//            SocietyByCategoryDiffUtilCallback(oldList, adapter.itemsList)
+//        DiffUtil.calculateDiff(callback).dispatchUpdatesTo(adapter)
     }
 }

@@ -62,7 +62,7 @@ class SocietyListViewModel : ViewModel() {
                     val item =
                         Gson().fromJson(items.getJSONObject(i).toString(), Society::class.java)
                     list.add(item)
-                    Log.e("SocietyItem", item.toString())
+//                    Log.e("SocietyItem", item.toString())
                 }
                 val action = Action.LoadSuccess(offset, list.reversed())
                 reduceAction(action)

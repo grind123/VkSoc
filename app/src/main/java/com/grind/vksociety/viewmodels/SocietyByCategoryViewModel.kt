@@ -17,7 +17,7 @@ import org.json.JSONObject
 
 class SocietyByCategoryViewModel: ViewModel() {
 
-    val groupsByCategoriesData: LiveData<Map<String?, List<Society>>> = MutableLiveData<Map<String?, List<Society>>>()
+    val groupsByCategoriesData: LiveData<Map<String?, MutableList<Society>>> = MutableLiveData<Map<String?, MutableList<Society>>>()
 
 
      fun getGroupsByCategories(){
@@ -41,10 +41,10 @@ class SocietyByCategoryViewModel: ViewModel() {
                          list.add(item)
                      }
                      list.reverse()
-                     val resultMap = list.filter { it.activity != null }
+                     val resultMap = list.filter { it.activity != null }.toMutableList()
                          .groupBy { it.activity }
                          .filter { !it.key!!.contains(":") && !it.key!!.contains(".") }
-                     (groupsByCategoriesData as MutableLiveData).postValue(resultMap)
+                     (groupsByCategoriesData as MutableLiveData).postValue(resultMap as Map<String?, MutableList<Society>>)
                  }
              }
          })

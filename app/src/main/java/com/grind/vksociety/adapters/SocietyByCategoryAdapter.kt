@@ -3,15 +3,20 @@ package com.grind.vksociety.adapters
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.grind.vksociety.R
+import com.grind.vksociety.fragments.OnGroupItemsListener
 import com.grind.vksociety.models.Society
 import de.hdodenhof.circleimageview.CircleImageView
 
-class SocietyByCategoryAdapter: RecyclerView.Adapter<SocietyByCategoryAdapter.CategoryHolder>() {
+class SocietyByCategoryAdapter(private val clickListener: OnGroupItemsListener,
+                               private val longClickListener: SocietyListAdapter.OnGroupItemLongClickListener
+): RecyclerView.Adapter<SocietyByCategoryAdapter.CategoryHolder>() {
 
-    var itemsList: List<Pair<String?, List<Society>>> = listOf()
+    var itemsList: List<Pair<String?, MutableList<Society>>> = listOf()
+    val selectedItemsList = mutableListOf<Long>()
 
     class CategoryHolder(view: View): RecyclerView.ViewHolder(view){
         val categoryName: TextView = view.findViewById(R.id.tv_category_name)
@@ -59,9 +64,34 @@ class SocietyByCategoryAdapter: RecyclerView.Adapter<SocietyByCategoryAdapter.Ca
                 val view = holder.groupContainersList[i]
                 val logo = view.findViewById<CircleImageView>(R.id.cimv_logo)
                 val groupName = view.findViewById<TextView>(R.id.tv_name)
+                val checkFrame = view.findViewById<ConstraintLayout>(R.id.cl_check_frame)
+
+                if (selectedItemsList.contains(society.id)) {
+                    checkFrame.visibility = View.VISIBLE
+                } else {
+                    checkFrame.visibility = View.INVISIBLE
+                }
                 Glide.with(holder.itemView).load(society.logoUrl).centerInside().into(logo)
                 groupName.text = society.name
                 view.visibility = View.VISIBLE
+                view.setOnClickListener {
+                    clickListener.onItemClick(society)
+                }
+                view.setOnLongClickListener {
+                    if (checkFrame.visibility == View.INVISIBLE) {
+                        checkFrame.visibility = View.VISIBLE
+                        selectedItemsList.add(society.id)
+                        longClickListener.onLongItemClick(society.id, selectedItemsList.size)
+                        clickListener.onSelectItemsCountChanged(selectedItemsList.size)
+                        return@setOnLongClickListener true
+                    } else {
+                        checkFrame.visibility = View.INVISIBLE
+                        selectedItemsList.remove(society.id)
+                        longClickListener.onLongItemClick(society.id, selectedItemsList.size)
+                        clickListener.onSelectItemsCountChanged(selectedItemsList.size)
+                        return@setOnLongClickListener true
+                    }
+                }
             }
         } else {
             for(i in 0 until 6){
@@ -70,9 +100,35 @@ class SocietyByCategoryAdapter: RecyclerView.Adapter<SocietyByCategoryAdapter.Ca
                     val view = holder.groupContainersList[i]
                     val logo = view.findViewById<CircleImageView>(R.id.cimv_logo)
                     val groupName = view.findViewById<TextView>(R.id.tv_name)
+                    val checkFrame = view.findViewById<ConstraintLayout>(R.id.cl_check_frame)
+
+                    if (selectedItemsList.contains(society.id)) {
+                        checkFrame.visibility = View.VISIBLE
+                    } else {
+                        checkFrame.visibility = View.INVISIBLE
+                    }
+
                     Glide.with(holder.itemView).load(society.logoUrl).centerInside().into(logo)
                     groupName.text = society.name
                     view.visibility = View.VISIBLE
+                    view.setOnClickListener {
+                        clickListener.onItemClick(society)
+                    }
+                    view.setOnLongClickListener {
+                        if (checkFrame.visibility == View.INVISIBLE) {
+                            checkFrame.visibility = View.VISIBLE
+                            selectedItemsList.add(society.id)
+                            longClickListener.onLongItemClick(society.id, selectedItemsList.size)
+                            clickListener.onSelectItemsCountChanged(selectedItemsList.size)
+                            return@setOnLongClickListener true
+                        } else {
+                            checkFrame.visibility = View.INVISIBLE
+                            selectedItemsList.remove(society.id)
+                            longClickListener.onLongItemClick(society.id, selectedItemsList.size)
+                            clickListener.onSelectItemsCountChanged(selectedItemsList.size)
+                            return@setOnLongClickListener true
+                        }
+                    }
                 } else {
                     val view = holder.groupContainersList[i]
                     view.visibility = View.INVISIBLE
@@ -89,5 +145,10 @@ class SocietyByCategoryAdapter: RecyclerView.Adapter<SocietyByCategoryAdapter.Ca
         for(i in 3 until 6){
             holder.groupContainersList[i].visibility = View.GONE
         }
+    }
+
+    fun clearAllSelectedItems(){
+        selectedItemsList.clear()
+        notifyItemRangeChanged(0, itemsList.size)
     }
 }

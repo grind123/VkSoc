@@ -45,8 +45,7 @@ class MainFragment: Fragment() {
 
 
         val adapter = MainFragmentPagerAdapter(fragmentManager!!).apply {
-            addFragment(SocietyByCategoriesListFragment())
-            addFragment(SocietyListFragment(object : OnGroupItemsListener{
+            addFragment(SocietyByCategoriesListFragment(object : OnGroupItemsListener{
                 override fun unsubscribe(listOfIds: List<Long>) {
                     viewModel.unsubscribeGroups(listOfIds)
                 }
@@ -54,6 +53,28 @@ class MainFragment: Fragment() {
                 override fun onSelectItemsCountChanged(count: Int) {
                     selectedItemsCountOnFragment1 = count
                     changeActionBarBySelectedItemsCount(selectedItemsCountOnFragment1)
+                }
+
+                override fun onItemClick(society: Society) {
+                    fragmentManager!!.beginTransaction()
+                        .add(R.id.main_container, SocietyInfoFragment()
+                            .apply {
+                                arguments = Bundle().apply { putParcelable("item", society) }
+                            })
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                        .addToBackStack(this.javaClass.simpleName)
+                        .commit()
+                }
+
+            }))
+            addFragment(SocietyListFragment(object : OnGroupItemsListener{
+                override fun unsubscribe(listOfIds: List<Long>) {
+                    viewModel.unsubscribeGroups(listOfIds)
+                }
+
+                override fun onSelectItemsCountChanged(count: Int) {
+                    selectedItemsCountOnFragment2 = count
+                    changeActionBarBySelectedItemsCount(selectedItemsCountOnFragment2)
                 }
 
                 override fun onItemClick(society: Society) {
@@ -116,7 +137,7 @@ class MainFragment: Fragment() {
                 (viewPager.adapter as MainFragmentPagerAdapter).getItem(viewPager.currentItem)
             when(fragment){
                 is SocietyListFragment -> fragment.clearAllSelectedGroups()
-//                is SocietyByCategoriesListFragment -> fragment.clearAllSelectedGroups()
+                is SocietyByCategoriesListFragment -> fragment.clearAllSelectedGroups()
             }
         }
     }

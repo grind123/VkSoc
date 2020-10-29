@@ -13,11 +13,11 @@ import org.json.JSONObject
 class MainViewModel : ViewModel() {
 
     fun unsubscribeGroups(listOfId: List<Long>) {
-        CoroutineScope(Dispatchers.IO).launch {
-            for (id in listOfId) {
-                unsubscribe(id)
-            }
-        }
+//        CoroutineScope(Dispatchers.IO).launch {
+//            for (id in listOfId) {
+//                unsubscribe(id)
+//            }
+//        }
     }
 
 

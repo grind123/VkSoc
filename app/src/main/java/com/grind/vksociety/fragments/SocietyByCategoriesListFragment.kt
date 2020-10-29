@@ -12,9 +12,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.grind.vksociety.App
 import com.grind.vksociety.R
+import com.grind.vksociety.adapters.AllGroupOfCategoryListAdapter
 import com.grind.vksociety.adapters.SocietyByCategoryAdapter
 import com.grind.vksociety.adapters.SocietyListAdapter
+import com.grind.vksociety.models.Society
 import com.grind.vksociety.viewmodels.SocietyByCategoryViewModel
+import java.text.FieldPosition
 
 class SocietyByCategoriesListFragment(private val listener: OnGroupItemsListener) : Fragment(){
 
@@ -64,7 +67,8 @@ class SocietyByCategoriesListFragment(private val listener: OnGroupItemsListener
     }
 
     private fun initAdapter(): SocietyByCategoryAdapter{
-        return SocietyByCategoryAdapter(listener, object : SocietyListAdapter.OnGroupItemLongClickListener {
+        return SocietyByCategoryAdapter(listener,
+            object : SocietyListAdapter.OnGroupItemLongClickListener {
             override fun onLongItemClick(societyId: Long, selectedItemsCount: Int) {
                 if (selectedItemsCount > 0) {
                     unsubscribeButton.visibility = View.VISIBLE
@@ -72,9 +76,20 @@ class SocietyByCategoriesListFragment(private val listener: OnGroupItemsListener
                     unsubscribeButton.visibility = View.GONE
                 }
             }
-        })
+        },
+            object : SocietyByCategoryAdapter.AllGroupsShower{
+                override fun showAllGroups(itemPosition: Int, groupsList: MutableList<Society>) {
+                    addFragment(R.id.main_container,
+                    AllGroupsOfCategoryFragment(itemPosition, groupsList, object : AllGroupOfCategoryListAdapter.ItemNotifier{
+                        override fun onNeedNotifyItem(itemPosition: Int, groupList: List<Society>) {
+                            adapter.itemsList[itemPosition].second.retainAll(groupList)
+                            adapter.notifyItemChanged(itemPosition)
+                        }
+                    }))
+                }
 
-
+            }
+        )
     }
 
     fun clearAllSelectedGroups() {

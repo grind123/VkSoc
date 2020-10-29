@@ -17,7 +17,7 @@ import com.grind.vksociety.adapters.SocietyListAdapter
 import com.grind.vksociety.custom.DisabledScrollGridLayoutManager
 import com.grind.vksociety.models.Society
 import com.grind.vksociety.redux.Action
-import com.grind.vksociety.utils.SocietyDiffUtilCallback
+import com.grind.vksociety.adapters.diffutils.SocietyDiffUtilCallback
 import com.grind.vksociety.viewmodels.SocietyListViewModel
 
 class SocietyListFragment(private val listener: OnGroupItemsListener) : Fragment() {

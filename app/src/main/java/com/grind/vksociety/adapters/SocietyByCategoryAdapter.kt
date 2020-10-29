@@ -11,14 +11,16 @@ import com.grind.vksociety.fragments.OnGroupItemsListener
 import com.grind.vksociety.models.Society
 import de.hdodenhof.circleimageview.CircleImageView
 
-class SocietyByCategoryAdapter(private val clickListener: OnGroupItemsListener,
-                               private val longClickListener: SocietyListAdapter.OnGroupItemLongClickListener
-): RecyclerView.Adapter<SocietyByCategoryAdapter.CategoryHolder>() {
+class SocietyByCategoryAdapter(
+    private val clickListener: OnGroupItemsListener,
+    private val longClickListener: SocietyListAdapter.OnGroupItemLongClickListener,
+    private val allGroupsShower: AllGroupsShower
+) : RecyclerView.Adapter<SocietyByCategoryAdapter.CategoryHolder>() {
 
     var itemsList: List<Pair<String?, MutableList<Society>>> = listOf()
     val selectedItemsList = mutableListOf<Long>()
 
-    class CategoryHolder(view: View): RecyclerView.ViewHolder(view){
+    class CategoryHolder(view: View) : RecyclerView.ViewHolder(view) {
         val categoryName: TextView = view.findViewById(R.id.tv_category_name)
         val groupsCount: TextView = view.findViewById(R.id.tv_group_count)
         val showAllButton: TextView = view.findViewById(R.id.tv_show_all_button)
@@ -35,7 +37,10 @@ class SocietyByCategoryAdapter(private val clickListener: OnGroupItemsListener,
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryHolder {
         val view = View.inflate(parent.context, R.layout.item_groups_by_catecory, null).apply {
-            layoutParams = RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT)
+            layoutParams = RecyclerView.LayoutParams(
+                RecyclerView.LayoutParams.MATCH_PARENT,
+                RecyclerView.LayoutParams.WRAP_CONTENT
+            )
         }
         return CategoryHolder(view)
     }
@@ -45,10 +50,14 @@ class SocietyByCategoryAdapter(private val clickListener: OnGroupItemsListener,
         holder.categoryName.text = itemsList[position].first
         holder.groupsCount.text = "${groupsList.size}"
 
-        if(groupsList.size < 6)
+        if (groupsList.size < 6) {
             holder.showAllButton.visibility = View.GONE
-        else
+            holder.showAllButton.setOnClickListener(null)
+        } else {
             holder.showAllButton.visibility = View.VISIBLE
+            holder.showAllButton.setOnClickListener { allGroupsShower.showAllGroups(position, groupsList) }
+        }
+
 
         setDataToGroupContainer(holder, groupsList)
     }
@@ -57,9 +66,9 @@ class SocietyByCategoryAdapter(private val clickListener: OnGroupItemsListener,
         return itemsList.size
     }
 
-    private fun setDataToGroupContainer(holder: CategoryHolder, data: List<Society>){
-        if(data.size > 6){
-            for(i in 0 until 6){
+    private fun setDataToGroupContainer(holder: CategoryHolder, data: List<Society>) {
+        if (data.size > 6) {
+            for (i in 0 until 6) {
                 val society = data[i]
                 val view = holder.groupContainersList[i]
                 val logo = view.findViewById<CircleImageView>(R.id.cimv_logo)
@@ -94,8 +103,8 @@ class SocietyByCategoryAdapter(private val clickListener: OnGroupItemsListener,
                 }
             }
         } else {
-            for(i in 0 until 6){
-                if(i < data.size){
+            for (i in 0 until 6) {
+                if (i < data.size) {
                     val society = data[i]
                     val view = holder.groupContainersList[i]
                     val logo = view.findViewById<CircleImageView>(R.id.cimv_logo)
@@ -135,20 +144,24 @@ class SocietyByCategoryAdapter(private val clickListener: OnGroupItemsListener,
                 }
 
             }
-            if(data.size <= 3){
+            if (data.size <= 3) {
                 goneSecondRawContainers(holder)
             }
         }
     }
 
-    private fun goneSecondRawContainers(holder: CategoryHolder){
-        for(i in 3 until 6){
+    private fun goneSecondRawContainers(holder: CategoryHolder) {
+        for (i in 3 until 6) {
             holder.groupContainersList[i].visibility = View.GONE
         }
     }
 
-    fun clearAllSelectedItems(){
+    fun clearAllSelectedItems() {
         selectedItemsList.clear()
         notifyItemRangeChanged(0, itemsList.size)
+    }
+
+    interface AllGroupsShower {
+        fun showAllGroups(itemPosition: Int, groupsList: MutableList<Society>)
     }
 }

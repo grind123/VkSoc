@@ -16,14 +16,16 @@ import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.grind.vksociety.App
 import com.grind.vksociety.R
-import com.grind.vksociety.models.Friend
-import com.grind.vksociety.models.Society
-import com.grind.vksociety.models.toDateFormat
-import com.grind.vksociety.models.toMembersCountFormat
+import com.grind.vksociety.models.*
 import com.grind.vksociety.viewmodels.SocietyInfoViewModel
 
 
 class SocietyInfoFragment: Fragment(){
+
+    companion object{
+        const val WITH_MY_ACTIVITY_MODE = 1
+        const val WITHOUT_MY_ACTIVITY_MODE = 2
+    }
 
     private lateinit var viewModel: SocietyInfoViewModel
     private lateinit var name: TextView
@@ -46,6 +48,7 @@ class SocietyInfoFragment: Fragment(){
         savedInstanceState: Bundle?
     ): View? {
         val currSociety = arguments?.getParcelable<Society>("item")!!
+        val currMode = arguments?.getInt("mode")!!
         val v = View.inflate(context, R.layout.fragment_info, null)
         name = v.findViewById(R.id.tv_name)
         description = v.findViewById(R.id.tv_desc)
@@ -56,45 +59,48 @@ class SocietyInfoFragment: Fragment(){
         dismissButton = v.findViewById(R.id.imv_close)
         bgAlpha = v.findViewById(R.id.bg_alpha)
 
+        if(currMode == WITHOUT_MY_ACTIVITY_MODE){
+            v.findViewById<View>(R.id.ic4).visibility = View.GONE
+            myActivity.visibility = View.GONE
+        }
+
         viewModel.societyInfoData.observe({lifecycle}, {info ->
-            activity?.runOnUiThread {
-                this.name.text = info.name
-                if(info.desc.isNotBlank()){
-                    this.description.text = info.desc
-                    (view?.findViewById(R.id.ic2) as View).visibility = View.VISIBLE
-                    this.description.visibility = View.VISIBLE
-                    this.description.setOnClickListener {
-                        (it as TextView).maxLines = Int.MAX_VALUE
-                        it.ellipsize = null
-                    }
-                }
-
-                this.subsCount.text = "${info.membersCount.toMembersCountFormat()} подписчиков • ${info.friendsInSociety.size} друзей"
-                this.lastPost.text = "Последняя запись ${info.lastPostDate.toDateFormat()}"
-                loadFriendsAvatars(info.friendsInSociety)
-                myActivity.setOnClickListener {
-                    val fragment = MyActivityFragment().apply {
-                        arguments = Bundle().apply {
-                            putParcelable("item", currSociety)
-                        }
-                    }
-                    fragmentManager?.beginTransaction()
-                        ?.add(R.id.main_container, fragment)
-                        ?.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                        ?.addToBackStack(fragment::class.java.simpleName)
-                        ?.commit()
-                }
-                openButton.setOnClickListener {
-                    val intent = Intent(Intent.ACTION_VIEW)
-                    intent.data = Uri.parse(info.url)
-                    startActivity(intent)
-                }
-            }
-
+            setInfoData(info,currSociety)
         })
 
         viewModel.getSocietyInfo(currSociety)
         return v
+    }
+
+    private fun setInfoData(info: SocietyInfo, currSociety: Society){
+        name.text = info.name
+        if(info.desc.isNotBlank()){
+            description.text = info.desc
+            (view?.findViewById(R.id.ic2) as View).visibility = View.VISIBLE
+            description.visibility = View.VISIBLE
+            description.setOnClickListener {
+                (it as TextView).maxLines = Int.MAX_VALUE
+                it.ellipsize = null
+            }
+        }
+
+        subsCount.text = "${info.membersCount.toMembersCountFormat()} подписчиков • ${info.friendsInSociety.size} друзей"
+        lastPost.text = "Последняя запись ${info.lastPostDate.toDateFormat()}"
+        loadFriendsAvatars(info.friendsInSociety)
+        myActivity.setOnClickListener {
+            val fragment = MyActivityFragment().apply {
+                arguments = Bundle().apply {
+                    putParcelable("item", currSociety)
+                }
+            }
+            addFragment(R.id.main_container, fragment)
+        }
+        openButton.setOnClickListener {
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.data = Uri.parse(info.url)
+            startActivity(intent)
+        }
+
     }
 
     private fun initListeners(){

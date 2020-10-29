@@ -1,4 +1,4 @@
-package com.grind.vksociety.utils
+package com.grind.vksociety.adapters.diffutils
 
 import androidx.recyclerview.widget.DiffUtil
 import com.grind.vksociety.models.Society

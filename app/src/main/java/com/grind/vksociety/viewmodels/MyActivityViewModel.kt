@@ -14,7 +14,7 @@ import kotlin.random.Random
 
 class MyActivityViewModel : ViewModel() {
     companion object {
-        private const val UNIX_SECOND_MONTH = 60 * 60 * 24 * 7
+        private const val UNIX_SECOND_MONTH = 60 * 60 * 24 * 30
     }
 
     val myActivityData: LiveData<MyActivity> = MutableLiveData<MyActivity>()
@@ -79,6 +79,10 @@ class MyActivityViewModel : ViewModel() {
         return wallPostList
     }
 
+
+    /**
+     * To much long parsing in runtime, use mock for get quick result
+     */
     private suspend fun getCommentsCount(groupId: Long, wallPostsData: List<WallPost>): Int {
         var commentsCount = 0
 
@@ -114,11 +118,4 @@ class MyActivityViewModel : ViewModel() {
     }
 
     private fun getCommentsCountMock(): Int = 0
-
-    fun unsubscribe(id: Long): JSONObject {
-        val request = VKRequest<JSONObject>("groups.leave")
-            .addParam("group_id", id)
-        return VK.executeSync(request)
-
-    }
 }

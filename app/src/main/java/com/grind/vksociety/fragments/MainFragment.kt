@@ -17,6 +17,15 @@ import com.grind.vksociety.adapters.MainFragmentPagerAdapter
 import com.grind.vksociety.models.Society
 import com.grind.vksociety.viewmodels.MainViewModel
 
+fun Fragment.addFragment(container: Int, fragment: Fragment){
+    fragmentManager!!.beginTransaction()
+        .add(container, fragment)
+        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+        .addToBackStack(this.javaClass.simpleName)
+        .commit()
+
+}
+
 class MainFragment: Fragment() {
 
     private lateinit var viewModel: MainViewModel
@@ -29,7 +38,7 @@ class MainFragment: Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory(App())).get(MainViewModel::class.java)
+        viewModel = ViewModelProvider(App.mainViewModelStore, ViewModelProvider.AndroidViewModelFactory(App())).get(MainViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -56,36 +65,13 @@ class MainFragment: Fragment() {
                 }
 
                 override fun onItemClick(society: Society) {
-                    fragmentManager!!.beginTransaction()
-                        .add(R.id.main_container, SocietyInfoFragment()
-                            .apply {
-                                arguments = Bundle().apply { putParcelable("item", society) }
-                            })
-                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                        .addToBackStack(this.javaClass.simpleName)
-                        .commit()
-                }
-
-            }))
-            addFragment(SocietyListFragment(object : OnGroupItemsListener{
-                override fun unsubscribe(listOfIds: List<Long>) {
-                    viewModel.unsubscribeGroups(listOfIds)
-                }
-
-                override fun onSelectItemsCountChanged(count: Int) {
-                    selectedItemsCountOnFragment2 = count
-                    changeActionBarBySelectedItemsCount(selectedItemsCountOnFragment2)
-                }
-
-                override fun onItemClick(society: Society) {
-                    fragmentManager!!.beginTransaction()
-                        .add(R.id.main_container, SocietyInfoFragment()
-                            .apply {
-                                arguments = Bundle().apply { putParcelable("item", society) }
-                            })
-                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                        .addToBackStack(this.javaClass.simpleName)
-                        .commit()
+                    addFragment(R.id.main_container, SocietyInfoFragment()
+                        .apply {
+                            arguments = Bundle().apply {
+                                putParcelable("item", society)
+                                putInt("mode", SocietyInfoFragment.WITH_MY_ACTIVITY_MODE )
+                            }
+                        })
                 }
 
             }))
@@ -101,16 +87,35 @@ class MainFragment: Fragment() {
                 }
 
                 override fun onItemClick(society: Society) {
-                    fragmentManager!!.beginTransaction()
-                        .add(R.id.main_container, SocietyInfoFragment()
-                            .apply {
-                                arguments = Bundle().apply { putParcelable("item", society) }
-                            })
-                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                        .addToBackStack(this.javaClass.simpleName)
-                        .commit()
+                    addFragment(R.id.main_container, SocietyInfoFragment()
+                        .apply {
+                            arguments = Bundle().apply {
+                                putParcelable("item", society)
+                                putInt("mode", SocietyInfoFragment.WITH_MY_ACTIVITY_MODE )
+                            }
+                        })
                 }
 
+            }))
+
+            addFragment(RecommendListFragment(object : OnGroupItemsListener{
+                override fun unsubscribe(listOfIds: List<Long>) {
+                    //Not need implemented
+                }
+
+                override fun onSelectItemsCountChanged(count: Int) {
+                    //Not need implemented
+                }
+
+                override fun onItemClick(society: Society) {
+                    addFragment(R.id.main_container, SocietyInfoFragment()
+                        .apply {
+                            arguments = Bundle().apply {
+                                putParcelable("item", society)
+                                putInt("mode", SocietyInfoFragment.WITHOUT_MY_ACTIVITY_MODE )
+                            }
+                        })
+                }
             }))
         }
 
@@ -122,6 +127,10 @@ class MainFragment: Fragment() {
                 when(position){
                     0 -> changeActionBarBySelectedItemsCount(selectedItemsCountOnFragment1)
                     1 -> changeActionBarBySelectedItemsCount(selectedItemsCountOnFragment2)
+                    2 -> {
+                        abTitle.text = "Рекомендации"
+                        cancelButton.visibility = View.GONE
+                    }
                 }
             }
         })

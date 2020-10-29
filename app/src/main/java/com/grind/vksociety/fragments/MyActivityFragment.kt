@@ -13,6 +13,8 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import com.grind.vksociety.App
 import com.grind.vksociety.R
@@ -105,7 +107,8 @@ class MyActivityFragment: Fragment() {
             MyActivity.LOW_LEVEL_ACTIVITY -> {
                 actionButton.text = "Отписаться"
                 actionButton.setOnClickListener {
-                    //TODO unsubscribe
+                    fragmentManager?.popBackStack()
+                    fragmentManager?.popBackStack()
                 }
             }
             MyActivity.HIGH_LEVEL_ACTIVITY -> {

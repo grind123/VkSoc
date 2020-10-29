@@ -23,7 +23,7 @@ class SocietyByCategoryViewModel: ViewModel() {
      fun getGroupsByCategories(){
          val request = VKRequest<JSONObject>("groups.get")
          request.addParam("extended", 1)
-         request.addParam("fields", "description,activity,members_count")
+         request.addParam("fields", "description,activity,members_count,public_category")
          request.addParam("count", 1000)
          VK.execute(request, object : VKApiCallback<JSONObject> {
              override fun fail(error: Exception) {
@@ -31,6 +31,7 @@ class SocietyByCategoryViewModel: ViewModel() {
              }
 
              override fun success(result: JSONObject) {
+                 Log.i("JSONObject", result.toString())
                  CoroutineScope(Dispatchers.Default).launch {
                      val list = mutableListOf<Society>()
                      val items = result.getJSONObject("response")

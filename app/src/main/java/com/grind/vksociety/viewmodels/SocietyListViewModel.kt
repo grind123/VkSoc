@@ -49,7 +49,6 @@ class SocietyListViewModel : ViewModel() {
         request.addParam("offset", offset)
         VK.execute(request, object : VKApiCallback<JSONObject> {
             override fun fail(error: Exception) {
-                Log.e("getSocietyList", error.message)
                 reduceAction(Action.LoadError(error))
             }
 

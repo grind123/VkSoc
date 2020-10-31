@@ -20,17 +20,6 @@ import com.vk.api.sdk.auth.VKAuthCallback
 import com.vk.api.sdk.auth.VKScope
 import com.vk.api.sdk.utils.VKUtils.getDisplayMetrics
 
-fun Int.toPx(): Int{
-    return (this * Resources.getSystem().displayMetrics.density).toInt()
-}
-
-
-fun Activity.getScreenWidth(): Int{
-    val defaultDisplay = this.windowManager.defaultDisplay
-    val point = Point()
-    defaultDisplay.getSize(point)
-    return point.x
-}
 
 class MainActivity : AppCompatActivity() {
 

@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
@@ -46,7 +45,7 @@ class MainFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val v = View.inflate(context, R.layout.main_fragment, null)
+        val v = View.inflate(context, R.layout.fragment_main, null)
         abTitle = v.findViewById(R.id.tv_ab_title)
         cancelButton = v.findViewById(R.id.tv_ab_cancel_button)
         tabLayout = v.findViewById(R.id.tab_layout)
@@ -161,6 +160,7 @@ class MainFragment: Fragment() {
         }
 
     }
+
 
 
 }

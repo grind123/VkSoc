@@ -45,6 +45,7 @@ class SocietyByCategoryViewModel: ViewModel() {
                      val resultMap = list.filter { it.activity != null }.toMutableList()
                          .groupBy { it.activity }
                          .filter { !it.key!!.contains(":") && !it.key!!.contains(".") }
+
                      (groupsByCategoriesData as MutableLiveData).postValue(resultMap as Map<String?, MutableList<Society>>)
                  }
              }

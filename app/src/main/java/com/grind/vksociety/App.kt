@@ -14,7 +14,7 @@ class App : Application() {
         val recommendListViewModelStore = ViewModelStore()
         val mainViewModelStore = ViewModelStore()
 
-        const val REAL_UNSUBSCRIBE_MODE = false
+        const val REAL_UNSUBSCRIBE_MODE = true
 
     }
 

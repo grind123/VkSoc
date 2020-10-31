@@ -18,6 +18,7 @@ class RecommendListAdapter(private val clickListener: OnGroupItemsListener): Rec
 
     class CategoryHolder(view: View): RecyclerView.ViewHolder(view){
         val categoryName: TextView = view.findViewById(R.id.tv_category_name)
+        val groupCount: TextView = view.findViewById(R.id.tv_group_count)
         val showAllButton: TextView = view.findViewById(R.id.tv_show_all_button)
         val groupContainersList = mutableListOf<View>(
             view.findViewById(R.id.item_1),
@@ -41,6 +42,7 @@ class RecommendListAdapter(private val clickListener: OnGroupItemsListener): Rec
         val groupsList = itemsList[position].second
         holder.categoryName.text = itemsList[position].first
         holder.showAllButton.visibility = View.INVISIBLE
+        holder.groupCount.visibility = View.INVISIBLE
 
         holder.itemView.setOnTouchListener(AnimationTouchListener())
 

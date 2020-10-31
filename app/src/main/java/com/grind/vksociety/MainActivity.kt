@@ -10,6 +10,7 @@ import android.util.DisplayMetrics
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.FragmentTransaction
+import com.grind.vksociety.fragments.IntroFragment
 import com.grind.vksociety.fragments.MainFragment
 import com.grind.vksociety.fragments.SocietyListFragment
 import com.vk.api.sdk.VK
@@ -56,6 +57,11 @@ class MainActivity : AppCompatActivity() {
                     supportFragmentManager.beginTransaction()
                         .add(R.id.main_container, MainFragment())
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                        .commitAllowingStateLoss()
+                    supportFragmentManager.beginTransaction()
+                        .add(R.id.main_container, IntroFragment())
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                        .addToBackStack(IntroFragment::class.java.simpleName)
                         .commitAllowingStateLoss()
                 }
 

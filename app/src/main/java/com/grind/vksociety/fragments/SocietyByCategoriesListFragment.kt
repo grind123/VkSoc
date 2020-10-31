@@ -55,7 +55,7 @@ class SocietyByCategoriesListFragment(private val listener: OnGroupItemsListener
         }
 
         viewModel.groupsByCategoriesData.observe({lifecycle}, {
-            adapter.itemsList = it.toList().sortedByDescending { it.second.size }
+            adapter.itemsList = it.toList().sortedByDescending { it.second.size }.toMutableList()
             adapter.notifyDataSetChanged()
         })
 

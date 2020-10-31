@@ -63,7 +63,7 @@ class MainViewModel : ViewModel() {
                 val items = result.getJSONArray("response")
                 for (i in 0 until items.length()) {
                     val category = (items[i] as JSONObject).getString("activity")
-                    if(category != "Закрытая группа" && category != "Открытая группа")
+                    if(category != "Закрытая группа" && category != "Открытая группа" && category != "Частная группа" && category != "Публичная страница")
                         setOfUnsubscribeCategories.add(category)
                 }
                 recommendedViewModel.makeRecommendation(setOfUnsubscribeCategories)

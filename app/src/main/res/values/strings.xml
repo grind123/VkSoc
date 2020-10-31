@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">VkSociety</string>
+    <string name="app_name">VkCommunity</string>
     <string name="main_hint">Коснитесь и удерживайте, чтобы увидеть информацию о сообществе</string>
     <string name="main_title">Отписаться от сообществ</string>
     <string name="low_activity_title">Ваша активность низкая</string>

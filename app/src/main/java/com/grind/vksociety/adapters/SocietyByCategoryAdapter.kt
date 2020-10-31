@@ -18,7 +18,7 @@ class SocietyByCategoryAdapter(
     private val allGroupsShower: AllGroupsShower
 ) : RecyclerView.Adapter<SocietyByCategoryAdapter.CategoryHolder>() {
 
-    var itemsList: List<Pair<String?, MutableList<Society>>> = listOf()
+    var itemsList: MutableList<Pair<String?, MutableList<Society>>> = mutableListOf()
     val selectedItemsList = mutableListOf<Long>()
 
     class CategoryHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -48,6 +48,15 @@ class SocietyByCategoryAdapter(
 
     override fun onBindViewHolder(holder: CategoryHolder, position: Int) {
         val groupsList = itemsList[position].second
+        if(groupsList.size == 0){
+            goneAllViews(holder)
+            return
+        } else {
+            holder.categoryName.visibility = View.VISIBLE
+            holder.groupsCount.visibility = View.VISIBLE
+            holder.showAllButton.visibility = View.VISIBLE
+            holder.itemView.findViewById<View>(R.id.separate_line).visibility = View.VISIBLE
+        }
         holder.categoryName.text = itemsList[position].first
         holder.groupsCount.text = "${groupsList.size}"
 
@@ -155,6 +164,14 @@ class SocietyByCategoryAdapter(
         for (i in 3 until 6) {
             holder.groupContainersList[i].visibility = View.GONE
         }
+    }
+
+    private fun goneAllViews(holder: CategoryHolder){
+        holder.categoryName.visibility = View.GONE
+        holder.groupsCount.visibility = View.GONE
+        holder.showAllButton.visibility = View.GONE
+        holder.groupContainersList.forEach { it.visibility = View.GONE }
+        holder.itemView.findViewById<View>(R.id.separate_line).visibility = View.GONE
     }
 
     fun clearAllSelectedItems() {

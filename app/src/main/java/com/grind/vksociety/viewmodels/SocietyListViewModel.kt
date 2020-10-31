@@ -45,7 +45,7 @@ class SocietyListViewModel : ViewModel() {
         val request = VKRequest<JSONObject>("groups.get")
         request.addParam("extended", 1)
         request.addParam("fields", "description,activity,members_count")
-        request.addParam("count", 50)
+        request.addParam("count", 30)
         request.addParam("offset", offset)
         VK.execute(request, object : VKApiCallback<JSONObject> {
             override fun fail(error: Exception) {

@@ -12,6 +12,9 @@ val repostsCount: Int) {
     val activityLevel: Int = calculateActivityLevel()
 
     private fun calculateActivityLevel(): Int{
-        return LOW_LEVEL_ACTIVITY
+        val weekTimeLine = System.currentTimeMillis() / 1000 - (60 * 60 * 24 * 7)
+        if(lastActivityDate < weekTimeLine) return LOW_LEVEL_ACTIVITY
+        else return HIGH_LEVEL_ACTIVITY
+
     }
 }

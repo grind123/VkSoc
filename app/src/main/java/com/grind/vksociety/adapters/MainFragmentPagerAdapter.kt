@@ -20,7 +20,7 @@ class MainFragmentPagerAdapter(fm: FragmentManager,
     override fun getPageTitle(position: Int): CharSequence? {
         return when(position){
             0 -> "Категории"
-            1 -> "Все сообщества"
+            1 -> "Все"
             2 -> "Для вас"
             else -> "Undefined"
         }

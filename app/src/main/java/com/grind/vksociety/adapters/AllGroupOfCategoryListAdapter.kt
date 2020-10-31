@@ -8,12 +8,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.grind.vksociety.App
 import com.grind.vksociety.R
+import com.grind.vksociety.animations.AnimationTouchListener
 import com.grind.vksociety.fragments.OnGroupItemsListener
 import com.grind.vksociety.models.Society
 import de.hdodenhof.circleimageview.CircleImageView
 
 
-class AllGroupOfCategoryListAdapter(private val longClickListener: SocietyListAdapter.OnGroupItemLongClickListener) :
+class AllGroupOfCategoryListAdapter(
+    private val onItemClickListener: OnItemClickListener,
+    private val longClickListener: SocietyListAdapter.OnGroupItemLongClickListener
+) :
     RecyclerView.Adapter<AllGroupOfCategoryListAdapter.SocietyHolder>() {
 
 
@@ -51,8 +55,10 @@ class AllGroupOfCategoryListAdapter(private val longClickListener: SocietyListAd
         holder.name.text = item.name
         Glide.with(holder.itemView).load(item.logoUrl).centerInside().into(holder.logo)
 
+
+        holder.itemView.setOnTouchListener(AnimationTouchListener())
         holder.itemView.setOnClickListener {
-//            Log.i("Coordinates", "x = ${holder.itemView.x}; y = ${holder.itemView.y}")
+            onItemClickListener.onItemClick(item)
 
         }
         holder.itemView.setOnLongClickListener {
@@ -78,13 +84,16 @@ class AllGroupOfCategoryListAdapter(private val longClickListener: SocietyListAd
         return items
     }
 
-    fun clearAllSelectedItems(){
+    fun clearAllSelectedItems() {
         selectedItemsList.clear()
         notifyItemRangeChanged(0, items.size)
     }
 
-        interface ItemNotifier {
-            fun onNeedNotifyItem(itemPosition: Int, groupList: List<Society>)
-        }
+    interface ItemNotifier {
+        fun onNeedNotifyItem(itemPosition: Int, groupList: List<Society>)
+    }
 
+    interface OnItemClickListener {
+        fun onItemClick(society: Society)
+    }
 }

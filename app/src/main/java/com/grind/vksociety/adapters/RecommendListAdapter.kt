@@ -7,6 +7,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.grind.vksociety.R
+import com.grind.vksociety.animations.AnimationTouchListener
 import com.grind.vksociety.fragments.OnGroupItemsListener
 import com.grind.vksociety.models.Society
 import de.hdodenhof.circleimageview.CircleImageView
@@ -40,6 +41,8 @@ class RecommendListAdapter(private val clickListener: OnGroupItemsListener): Rec
         val groupsList = itemsList[position].second
         holder.categoryName.text = itemsList[position].first
         holder.showAllButton.visibility = View.INVISIBLE
+
+        holder.itemView.setOnTouchListener(AnimationTouchListener())
 
         setDataToGroupContainer(holder, groupsList)
     }

@@ -19,13 +19,30 @@
 
         <TextView
             android:id="@+id/tv_ab_title"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginStart="22dp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:layout_weight="1"
+            android:layout_marginEnd="16dp"
             android:textSize="24sp"
             android:fontFamily="sans-serif-medium"
             android:textColor="@android:color/black"
             android:gravity="center_vertical"/>
+
+        <TextView
+            android:id="@+id/tv_ab_cancel_button"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="16dp"
+            android:text="Отменить"
+            android:visibility="gone"
+            android:gravity="center"
+            android:layout_gravity="right"
+            android:textColor="@color/blue_button_text"
+            android:fontFamily="sans-serif-medium"/>
+
     </LinearLayout>
     
     <View

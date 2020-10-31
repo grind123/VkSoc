@@ -7,6 +7,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.grind.vksociety.R
+import com.grind.vksociety.animations.AnimationTouchListener
 import com.grind.vksociety.fragments.OnGroupItemsListener
 import com.grind.vksociety.models.Society
 import de.hdodenhof.circleimageview.CircleImageView
@@ -58,7 +59,7 @@ class SocietyByCategoryAdapter(
             holder.showAllButton.setOnClickListener { allGroupsShower.showAllGroups(position, groupsList) }
         }
 
-
+        holder.groupContainersList.forEach { it.setOnTouchListener(AnimationTouchListener()) }
         setDataToGroupContainer(holder, groupsList)
     }
 

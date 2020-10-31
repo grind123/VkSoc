@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.grind.vksociety.App
 import com.grind.vksociety.R
+import com.grind.vksociety.animations.AnimationTouchListener
 import com.grind.vksociety.fragments.OnGroupItemsListener
 import com.grind.vksociety.models.Society
 import de.hdodenhof.circleimageview.CircleImageView
@@ -53,6 +54,8 @@ class SocietyListAdapter(
 
         holder.name.text = item.name
         Glide.with(holder.itemView).load(item.logoUrl).centerInside().into(holder.logo)
+
+        holder.itemView.setOnTouchListener(AnimationTouchListener())
 
         holder.itemView.setOnClickListener {
 //            Log.i("Coordinates", "x = ${holder.itemView.x}; y = ${holder.itemView.y}")

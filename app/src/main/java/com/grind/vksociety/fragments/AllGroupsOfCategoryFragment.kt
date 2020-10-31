@@ -1,8 +1,6 @@
 package com.grind.vksociety.fragments
 
-import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,14 +13,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.grind.vksociety.App
 import com.grind.vksociety.R
 import com.grind.vksociety.adapters.AllGroupOfCategoryListAdapter
-import com.grind.vksociety.adapters.SocietyByCategoryAdapter
 import com.grind.vksociety.adapters.SocietyListAdapter
 import com.grind.vksociety.custom.DisabledScrollGridLayoutManager
 import com.grind.vksociety.models.Society
-import com.grind.vksociety.redux.Action
 import com.grind.vksociety.adapters.diffutils.SocietyDiffUtilCallback
 import com.grind.vksociety.viewmodels.MainViewModel
-import com.grind.vksociety.viewmodels.SocietyListViewModel
 
 class AllGroupsOfCategoryFragment(
     private val itemPosition: Int,
@@ -31,7 +26,8 @@ class AllGroupsOfCategoryFragment(
 ) : Fragment() {
 
     private lateinit var backButton: ImageView
-    private lateinit var title: TextView
+    private lateinit var abTitle: TextView
+    private lateinit var cancelButton: TextView
     private lateinit var rv: RecyclerView
     private lateinit var adapter: AllGroupOfCategoryListAdapter
     private lateinit var unsubscribeButton: TextView
@@ -45,12 +41,13 @@ class AllGroupsOfCategoryFragment(
     ): View? {
         val v = View.inflate(context, R.layout.fragment_all_groups_of_categories, null)
         backButton = v.findViewById(R.id.imv_back)
-        title = v.findViewById(R.id.tv_ab_title)
+        abTitle = v.findViewById(R.id.tv_ab_title)
+        cancelButton = v.findViewById(R.id.tv_ab_cancel_button)
         rv = v.findViewById(R.id.rv)
         unsubscribeButton = v.findViewById(R.id.tv_unsubscribe_button)
 
         backButton.setOnClickListener { fragmentManager?.popBackStack() }
-        title.text = itemsList.first().activity
+        abTitle.text = itemsList.first().activity
 
         initAdapter()
         initRecyclerView()
@@ -61,7 +58,10 @@ class AllGroupsOfCategoryFragment(
 
     private fun initListeners() {
         unsubscribeButton.setOnClickListener {
-            ViewModelProvider(App.mainViewModelStore, ViewModelProvider.AndroidViewModelFactory(App())).get(MainViewModel::class.java)
+            ViewModelProvider(
+                App.mainViewModelStore,
+                ViewModelProvider.AndroidViewModelFactory(App())
+            ).get(MainViewModel::class.java)
                 .unsubscribeGroups(adapter.selectedItemsList)
             val newList = adapter.getItems().filter { !adapter.selectedItemsList.contains(it.id) }
                 .toMutableList()
@@ -70,22 +70,39 @@ class AllGroupsOfCategoryFragment(
             DiffUtil.calculateDiff(callback).dispatchUpdatesTo(adapter)
             adapter.selectedItemsList.clear()
             unsubscribeButton.visibility = View.GONE
+            changeActionBarBySelectedItemsCount(adapter.selectedItemsList.size)
+        }
 
+        cancelButton.setOnClickListener {
+            clearAllSelectedGroups()
+            changeActionBarBySelectedItemsCount(adapter.selectedItemsList.size)
         }
     }
 
 
     private fun initAdapter() {
         adapter =
-            AllGroupOfCategoryListAdapter(object : SocietyListAdapter.OnGroupItemLongClickListener {
-                override fun onLongItemClick(societyId: Long, selectedItemsCount: Int) {
-                    if (selectedItemsCount > 0) {
-                        unsubscribeButton.visibility = View.VISIBLE
-                    } else {
-                        unsubscribeButton.visibility = View.GONE
-                    }
+            AllGroupOfCategoryListAdapter(object :
+                AllGroupOfCategoryListAdapter.OnItemClickListener {
+                override fun onItemClick(society: Society) {
+                    addFragment(R.id.main_container, SocietyInfoFragment().apply {
+                        arguments = Bundle().apply {
+                            putInt("mode", SocietyInfoFragment.WITH_MY_ACTIVITY_MODE)
+                            putParcelable("item", society)
+                        }
+                    })
                 }
-            })
+            },
+                object : SocietyListAdapter.OnGroupItemLongClickListener {
+                    override fun onLongItemClick(societyId: Long, selectedItemsCount: Int) {
+                        changeActionBarBySelectedItemsCount(selectedItemsCount)
+                        if (selectedItemsCount > 0) {
+                            unsubscribeButton.visibility = View.VISIBLE
+                        } else {
+                            unsubscribeButton.visibility = View.GONE
+                        }
+                    }
+                })
         adapter.setItems(itemsList.toMutableList())
 
     }
@@ -95,6 +112,18 @@ class AllGroupsOfCategoryFragment(
         rv.layoutManager = lm
         rv.adapter = adapter
     }
+
+    private fun changeActionBarBySelectedItemsCount(count: Int){
+        if(count > 0){
+            abTitle.text = "Выбрано: $count"
+            cancelButton.visibility = View.VISIBLE
+        } else {
+            abTitle.text = itemsList.first().activity
+            cancelButton.visibility = View.GONE
+        }
+
+    }
+
 
     fun clearAllSelectedGroups() {
         adapter.clearAllSelectedItems()
